@@ -4,7 +4,7 @@ const axios = require('axios');
 const logger = require('./logger');
 const expressPino = require('express-pino-logger')({ logger });
 // Task 1: import the natural library
-const natural = {{insert code here}}
+const natural = require('natural');
 
 // Task 2: initialize the express server
 {{insert code here}}
