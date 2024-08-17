@@ -135,17 +135,30 @@ router.put('/:id', async (req, res, next) => {
         next(e);
     }
 });
-/*
+
 // Delete an existing item
 router.delete('/:id', async (req, res, next) => {
     try {
-        //Step 6: task 1 - insert code here
-        //Step 6: task 2 - insert code here
-        //Step 6: task 3 - insert code here
-        //Step 6: task 4 - insert code here
+        //Step 6: task 1 - connect to db
+        const db = await connectToDatabase();
+        //Step 6: task 2 - retrieve collection
+        const collection = db.collection("secondChanceItems");
+
+        //Step 6: task 3 - find item 
+        const id = req.params.id;
+        let item = await collection.findOne({ id });
+        if (!item) {
+            logger.error('secondChanceItem not found');
+            return res.status(404).send("The requested item was not found.");
+        }
+
+        //Step 6: task 4 - delete item 
+        await collection.deleteOne({ id });
+        res.json({ "deleted": "success" });
+
     } catch (e) {
         next(e);
     }
 });
-*/
+
 module.exports = router;
