@@ -40,22 +40,38 @@ router.get('/', async (req, res, next) => {
         next(e);
     }
 });
-/*
+
 // Add a new item
-router.post('/', "{Step 3: Task 6 insert code here}", async (req, res, next) => {
-    try {
+router.post('/',
+    upload.single('file'), //Step 3: Task 6 - Upload the image to the images directory
+    async (req, res, next) => {
+        try {
 
-        //Step 3: task 1 - insert code here
-        //Step 3: task 2 - insert code here
-        //Step 3: task 3 - insert code here
-        //Step 3: task 4 - insert code here
-        //Step 3: task 5 - insert code here
-        res.status(201).json(secondChanceItem.ops[0]);
-    } catch (e) {
-        next(e);
-    }
-});
+            //Step 3: task 1 - retrieve the db connection
+            const db = await connectToDatabase();
+            //Step 3: task 2 - retrieve the collection
+            const collection = db.collection("secondChanceItems");
+            //Step 3: task 3 - create a new item
+            let secondChanceItem = req.body;
+            //Step 3: task 4 - create a new ID for the new item
+            const lastItemQuery = await collection.find().sort({ 'id': -1 }).limit(1);
+            await lastItemQuery.forEach(item => {
+                secondChanceItem.id = (parseInt(item.id) + 1).toString();
+            });
+            //Step 3: task 5 - create a new date for the new item
+            const date_added = Math.floor(new Date().getTime() / 1000);
+            secondChanceItem.date_added = date_added
+            console.log("\n\n---> new item:\n", secondChanceItem);
+            //Step 3: task 6 - add new item to db collection
+            secondChanceItem = await collection.insertOne(secondChanceItem);
+            console.log("\n\n---> new item:\n", secondChanceItem);
+            res.status(201).json(secondChanceItem);
 
+        } catch (e) {
+            next(e);
+        }
+    });
+/*
 // Get a single secondChanceItem by ID
 router.get('/:id', async (req, res, next) => {
     try {
