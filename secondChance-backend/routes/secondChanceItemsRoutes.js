@@ -71,19 +71,27 @@ router.post('/',
             next(e);
         }
     });
-/*
+
 // Get a single secondChanceItem by ID
 router.get('/:id', async (req, res, next) => {
     try {
-        //Step 4: task 1 - insert code here
-        //Step 4: task 2 - insert code here
-        //Step 4: task 3 - insert code here
-        //Step 4: task 4 - insert code here
+        //Step 4: task 1 - retrieve db connection
+        const db = await connectToDatabase();
+        //Step 4: task 2 - retrieve db collection
+        const collection = db.collection("secondChanceItems");
+        //Step 4: task 3 - find item with the specified ID
+        const id = req.params.id;
+        const item = await collection.findOne({ 'id': id });
+        //Step 4: task 4 - return the item
+        if (!item) {
+            return res.status(404).send("The requested item was not found.");
+        }
+        res.json(item);
     } catch (e) {
         next(e);
     }
 });
-
+/*
 // Update and existing item
 router.put('/:id', async (req, res, next) => {
     try {
