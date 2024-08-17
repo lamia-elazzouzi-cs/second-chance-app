@@ -11,12 +11,12 @@ const directoryPath = 'public/images';
 
 // Set up storage for uploaded files
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, directoryPath); // Specify the upload directory
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname); // Use the original file name
-  },
+    destination: function (req, file, cb) {
+        cb(null, directoryPath); // Specify the upload directory
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname); // Use the original file name
+    },
 });
 
 const upload = multer({ storage: storage });
@@ -26,22 +26,23 @@ const upload = multer({ storage: storage });
 router.get('/', async (req, res, next) => {
     logger.info('/ called');
     try {
-        //Step 2: task 1 - insert code here
-        //Step 2: task 2 - insert code here
-        //Step 2: task 3 - insert code here
-        //Step 2: task 4 - insert code here
-
+        //Step 2: task 1 - Get the db connection
+        const db = await connectToDatabase();
+        //Step 2: task 2 - retrieve the collection
         const collection = db.collection("secondChanceItems");
+        //Step 2: task 3 - fetch the items
         const secondChanceItems = await collection.find({}).toArray();
+        //Step 2: task 4 - return the items
         res.json(secondChanceItems);
+
     } catch (e) {
         logger.console.error('oops something went wrong', e)
         next(e);
     }
 });
-
+/*
 // Add a new item
-router.post('/', {Step 3: Task 6 insert code here}, async(req, res,next) => {
+router.post('/', "{Step 3: Task 6 insert code here}", async (req, res, next) => {
     try {
 
         //Step 3: task 1 - insert code here
@@ -68,7 +69,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Update and existing item
-router.put('/:id', async(req, res,next) => {
+router.put('/:id', async (req, res, next) => {
     try {
         //Step 5: task 1 - insert code here
         //Step 5: task 2 - insert code here
@@ -81,7 +82,7 @@ router.put('/:id', async(req, res,next) => {
 });
 
 // Delete an existing item
-router.delete('/:id', async(req, res,next) => {
+router.delete('/:id', async (req, res, next) => {
     try {
         //Step 6: task 1 - insert code here
         //Step 6: task 2 - insert code here
@@ -91,5 +92,5 @@ router.delete('/:id', async(req, res,next) => {
         next(e);
     }
 });
-
+*/
 module.exports = router;
