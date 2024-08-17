@@ -5,6 +5,7 @@ const fs = require('fs');
 const router = express.Router();
 const connectToDatabase = require('../models/db');
 const logger = require('../logger');
+const { ReturnDocument } = require('mongodb');
 
 // Define the upload directory path
 const directoryPath = 'public/images';
@@ -84,6 +85,7 @@ router.get('/:id', async (req, res, next) => {
         const item = await collection.findOne({ 'id': id });
         //Step 4: task 4 - return the item
         if (!item) {
+            logger.error(`secondChanceItem with id=${id} was not found`);
             return res.status(404).send("The requested item was not found.");
         }
         res.json(item);
@@ -91,20 +93,49 @@ router.get('/:id', async (req, res, next) => {
         next(e);
     }
 });
-/*
+
 // Update and existing item
 router.put('/:id', async (req, res, next) => {
     try {
-        //Step 5: task 1 - insert code here
-        //Step 5: task 2 - insert code here
-        //Step 5: task 3 - insert code here
-        //Step 5: task 4 - insert code here
-        //Step 5: task 5 - insert code here
+        //Step 5: task 1 - retrieve db cnx
+        const db = await connectToDatabase();
+        //Step 5: task 2 - retrieve collection
+        const collection = db.collection("secondChanceItems");
+
+        //Step 5: task 3 - check if the requested item exists
+        const id = req.params.id;
+        let item = await collection.findOne({ id });
+        if (!item) {
+            logger.error('secondChanceItem not found');
+            return res.status(404).send("The requested item was not found.");
+        }
+
+        //Step 5: task 4 - updated the item
+        item.category = req.body.category;
+        item.condition = req.body.condition;
+        item.age_days = req.body.age_days;
+        item.description = req.body.description;
+        item.age_years = Number((item.age_days / 365).toFixed(1));
+        item.updatedAt = new Date();
+
+        const updatedItem = await collection.findOneAndUpdate(
+            { id },
+            { $set: item },
+            { returnDocument: 'after' }
+        );
+
+        //Step 5: task 5 - send confirmation of update
+        if (updatedItem) {
+            res.json({ "uploaded": "success" });
+        } else {
+            res.json({ "uploaded": "failed" });
+        }
+
     } catch (e) {
         next(e);
     }
 });
-
+/*
 // Delete an existing item
 router.delete('/:id', async (req, res, next) => {
     try {
