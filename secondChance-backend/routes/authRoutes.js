@@ -48,4 +48,21 @@ router.post('/register', async (req, res) => {
     }
 });
 
+router.post('/login', async (req, res) => {
+    try {
+        // Task 1: Connect to `secondChance` in MongoDB through `connectToDatabase` in `db.js`.
+        // Task 2: Access MongoDB `users` collection
+        // Task 3: Check for user credentials in database
+        // Task 4: Check if the password matches the encrypted password and send appropriate message on mismatch
+        // Task 5: Fetch user details from a database
+        // Task 6: Create JWT authentication if passwords match with user._id as payload
+        res.json({ authtoken, userName, userEmail });
+        // Task 7: Send appropriate message if the user is not found
+    } catch (e) {
+        return res.status(500).send('Internal server error');
+
+    }
+});
+
+
 module.exports = router;
