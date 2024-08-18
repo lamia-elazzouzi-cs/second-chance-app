@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken');
 const connectToDatabase = require('../models/db');
 const JWT_SECRET = `${process.env.JWT_SECRET}` || "thisisasecretkey";
 
+const pino = require('pino');  // Import Pino logger
+const logger = pino();  // Create a Pino logger instance
 
 router.post('/register', async (req, res) => {
     try {
@@ -39,8 +41,8 @@ router.post('/register', async (req, res) => {
         // Task 7: Log the successful registration using the logger
         logger.info('User registered successfully');
         // Task 8: Return the user email and the token as a JSON
-        res.json({ authtoken, email });
-        
+        res.json({ authToken, email });
+
     } catch (e) {
         return res.status(500).send('Internal server error');
     }
