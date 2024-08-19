@@ -39,11 +39,11 @@ router.post('/register', async (req, res) => {
         });
         // Task 6: Create JWT authentication if passwords match with user._id as payload
         const payload = { user: { id: newUser.insertedId } };
-        const authToken = jwt.sign(payload, JWT_SECRET);
+        const authtoken = jwt.sign(payload, JWT_SECRET);
         // Task 7: Log the successful registration using the logger
         logger.info('User registered successfully');
         // Task 8: Return the user email and the token as a JSON
-        res.json({ authToken, email });
+        res.json({ authtoken, email });
 
     } catch (e) {
         return res.status(500).send('Internal server error');
@@ -71,15 +71,15 @@ router.post('/login', async (req, res) => {
             }
 
             // Task 5: Fetch user details from a database
-            const firstName = appUser.firstName;
-            const appUserEmail = appUser.email;
+            const userName = appUser.firstName;
+            const userEmail = appUser.email;
 
             // Task 6: Create JWT authentication if passwords match with user._id as payload
             let payload = { user: { id: appUser._id.toString() } };
-            const authToken = jwt.sign(payload, JWT_SECRET);
+            const authtoken = jwt.sign(payload, JWT_SECRET);
             logger.info('User logged in successfully');
 
-            return res.status(200).json({ authToken, firstName, appUserEmail });
+            return res.status(200).json({ authtoken, userName, userEmail });
 
         } else {
 
